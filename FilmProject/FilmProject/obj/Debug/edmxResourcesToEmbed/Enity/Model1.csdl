@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FilmDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="TFilm">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Poster" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Yil" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+    <Property Name="Film" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Kategori" Type="Int32" />
+    <NavigationProperty Name="TOyuncu" Relationship="Self.FK_TOyuncu_TFilm" FromRole="TFilm" ToRole="TOyuncu" />
+    <NavigationProperty Name="TKategori" Relationship="FilmDBModel.FK_TFilm_TKategori" FromRole="TFilm" ToRole="TKategori" />
+  </EntityType>
+  <EntityType Name="TOyuncu">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Oyuncu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Film" Type="Int32" />
+    <NavigationProperty Name="TFilm" Relationship="Self.FK_TOyuncu_TFilm" FromRole="TOyuncu" ToRole="TFilm" />
+    <Property Name="Durum" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK_TOyuncu_TFilm">
+    <End Role="TFilm" Type="Self.TFilm" Multiplicity="0..1" />
+    <End Role="TOyuncu" Type="Self.TOyuncu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TFilm">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TOyuncu">
+        <PropertyRef Name="Film" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FilmDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="TFilm" EntityType="Self.TFilm" />
+    <EntitySet Name="TOyuncu" EntityType="Self.TOyuncu" />
+    <AssociationSet Name="FK_TOyuncu_TFilm" Association="Self.FK_TOyuncu_TFilm">
+      <End Role="TFilm" EntitySet="TFilm" />
+      <End Role="TOyuncu" EntitySet="TOyuncu" />
+    </AssociationSet>
+    <EntitySet Name="TKategori" EntityType="FilmDBModel.TKategori" />
+    <AssociationSet Name="FK_TFilm_TKategori" Association="FilmDBModel.FK_TFilm_TKategori">
+      <End Role="TKategori" EntitySet="TKategori" />
+      <End Role="TFilm" EntitySet="TFilm" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="TKategori">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Kategori" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TFilm" Relationship="FilmDBModel.FK_TFilm_TKategori" FromRole="TKategori" ToRole="TFilm" />
+    <Property Name="Durum" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK_TFilm_TKategori">
+    <End Type="FilmDBModel.TKategori" Role="TKategori" Multiplicity="0..1" />
+    <End Type="FilmDBModel.TFilm" Role="TFilm" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TKategori">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TFilm">
+        <PropertyRef Name="Kategori" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
